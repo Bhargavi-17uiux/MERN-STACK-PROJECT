@@ -1,11 +1,13 @@
 import React from 'react';
 
-export default function TaskCard({ task, onMoveTask }) {
+export default function TaskCard({ task, onMoveTask, onEditTask, onDeleteTask }) {
   const priorityClass = {
     low: 'badge-low',
     medium: 'badge-medium',
     high: 'badge-high',
   }[task.priority] || 'badge-low';
+
+  const taskId = task.id || task._id;
 
   return (
     <div className="task-card">
@@ -14,29 +16,46 @@ export default function TaskCard({ task, onMoveTask }) {
         <span className={`badge ${priorityClass}`}>{task.priority}</span>
       </div>
 
-      <p className="task-desc">{task.description}</p>
+      {task.description && <p className="task-desc">{task.description}</p>}
 
       <div className="task-footer">
         <div className="task-due">
           <span>📅</span>
-          <span>{task.dueDate || 'No due date'}</span>
+          <span>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No date'}</span>
         </div>
 
         <div className="task-actions">
           {task.status !== 'todo' && (
             <button
               className="btn-icon-sm"
-              title="Move to Previous Status"
-              onClick={() => onMoveTask(task.id, task.status === 'completed' ? 'in_progress' : 'todo')}
+              title="Move left"
+              onClick={() => onMoveTask(taskId, task.status === 'completed' ? 'in_progress' : 'todo')}
             >
               ◀
             </button>
           )}
+
+          <button
+            className="btn-icon-sm"
+            title="Edit task"
+            onClick={() => onEditTask(task)}
+          >
+            ✏️
+          </button>
+
+          <button
+            className="btn-icon-sm delete-btn"
+            title="Delete task"
+            onClick={() => onDeleteTask(taskId)}
+          >
+            🗑️
+          </button>
+
           {task.status !== 'completed' && (
             <button
               className="btn-icon-sm"
-              title="Move to Next Status"
-              onClick={() => onMoveTask(task.id, task.status === 'todo' ? 'in_progress' : 'completed')}
+              title="Move right"
+              onClick={() => onMoveTask(taskId, task.status === 'todo' ? 'in_progress' : 'completed')}
             >
               ▶
             </button>

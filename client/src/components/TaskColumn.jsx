@@ -1,7 +1,15 @@
 import React from 'react';
 import TaskCard from './TaskCard';
 
-export default function TaskColumn({ title, statusKey, count, tasks, onMoveTask }) {
+export default function TaskColumn({
+  title,
+  statusKey,
+  count,
+  tasks,
+  onMoveTask,
+  onEditTask,
+  onDeleteTask,
+}) {
   return (
     <div className="column">
       <div className="column-header">
@@ -14,12 +22,18 @@ export default function TaskColumn({ title, statusKey, count, tasks, onMoveTask 
 
       <div className="task-list">
         {tasks.length === 0 ? (
-          <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.85rem' }}>
+          <div className="empty-column-msg">
             No tasks in {title}
           </div>
         ) : (
           tasks.map((task) => (
-            <TaskCard key={task.id} task={task} onMoveTask={onMoveTask} />
+            <TaskCard
+              key={task.id || task._id}
+              task={task}
+              onMoveTask={onMoveTask}
+              onEditTask={onEditTask}
+              onDeleteTask={onDeleteTask}
+            />
           ))
         )}
       </div>

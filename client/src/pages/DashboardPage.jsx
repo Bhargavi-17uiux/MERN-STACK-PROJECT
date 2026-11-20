@@ -2,22 +2,57 @@ import React from 'react';
 import StatsCard from '../components/StatsCard';
 import TaskColumn from '../components/TaskColumn';
 
-export default function DashboardPage({ tasks, onMoveTask, onOpenNewTaskModal }) {
+export default function DashboardPage({
+  tasks,
+  projects,
+  selectedProjectId,
+  priorityFilter,
+  onPriorityFilterChange,
+  onMoveTask,
+  onEditTask,
+  onDeleteTask,
+  onOpenNewTaskModal,
+}) {
   const todoTasks = tasks.filter((t) => t.status === 'todo');
   const inProgressTasks = tasks.filter((t) => t.status === 'in_progress');
   const completedTasks = tasks.filter((t) => t.status === 'completed');
+
+  const currentProject = projects.find((p) => (p.id || p._id) === selectedProjectId);
 
   return (
     <div className="content-area">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Project Dashboard</h1>
-          <p className="page-subtitle">Track, prioritize, and manage team tasks in real-time</p>
+          <h1 className="page-title">
+            {currentProject ? currentProject.title : 'All Projects Dashboard'}
+          </h1>
+          <p className="page-subtitle">
+            {currentProject ? currentProject.description || 'Project workspace' : 'Comprehensive team overview & real-time progress'}
+          </p>
         </div>
-        <button className="btn btn-primary" onClick={onOpenNewTaskModal}>
-          <span>➕</span>
-          <span>New Task</span>
-        </button>
+
+        <div className="header-actions">
+          <button className="btn btn-primary" onClick={onOpenNewTaskModal}>
+            <span>➕</span>
+            <span>Add Task</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Filter Bar */}
+      <div className="filter-bar">
+        <span className="filter-label">Filter by Priority:</span>
+        <div className="filter-pills">
+          {['all', 'high', 'medium', 'low'].map((p) => (
+            <button
+              key={p}
+              className={`pill ${priorityFilter === p ? 'active' : ''}`}
+              onClick={() => onPriorityFilterChange(p)}
+            >
+              {p.charAt(0).toUpperCase() + p.slice(1)}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Stats Cards Section */}
@@ -52,7 +87,7 @@ export default function DashboardPage({ tasks, onMoveTask, onOpenNewTaskModal })
         />
       </div>
 
-      {/* Board Columns: To Do, In Progress, Completed */}
+      {/* Kanban Board Columns */}
       <div className="board-container">
         <TaskColumn
           title="To Do"
@@ -60,6 +95,8 @@ export default function DashboardPage({ tasks, onMoveTask, onOpenNewTaskModal })
           count={todoTasks.length}
           tasks={todoTasks}
           onMoveTask={onMoveTask}
+          onEditTask={onEditTask}
+          onDeleteTask={onDeleteTask}
         />
         <TaskColumn
           title="In Progress"
@@ -67,6 +104,8 @@ export default function DashboardPage({ tasks, onMoveTask, onOpenNewTaskModal })
           count={inProgressTasks.length}
           tasks={inProgressTasks}
           onMoveTask={onMoveTask}
+          onEditTask={onEditTask}
+          onDeleteTask={onDeleteTask}
         />
         <TaskColumn
           title="Completed"
@@ -74,6 +113,8 @@ export default function DashboardPage({ tasks, onMoveTask, onOpenNewTaskModal })
           count={completedTasks.length}
           tasks={completedTasks}
           onMoveTask={onMoveTask}
+          onEditTask={onEditTask}
+          onDeleteTask={onDeleteTask}
         />
       </div>
     </div>

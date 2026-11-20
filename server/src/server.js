@@ -11,25 +11,32 @@ connectDB();
 
 const app = express();
 
-// Middleware: Enable Cross-Origin Resource Sharing (allows frontend to talk to backend)
+// Middleware
 app.use(cors());
-
-// Middleware: Parse incoming JSON request payloads
 app.use(express.json());
 
-// Routes
-const healthRoutes = require('./routes/health.routes');
-app.use('/api/health', healthRoutes);
+// Mount API Routes
+app.use('/api/health', require('./routes/health.routes'));
+app.use('/api/auth', require('./routes/auth.routes'));
+app.use('/api/projects', require('./routes/project.routes'));
+app.use('/api/tasks', require('./routes/task.routes'));
+app.use('/api/dashboard', require('./routes/dashboard.routes'));
 
 // Root route
 app.get('/', (req, res) => {
   res.json({
     message: 'Welcome to TaskFlow API',
-    docs: '/api/health for system status',
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      projects: '/api/projects',
+      tasks: '/api/tasks',
+      dashboard: '/api/dashboard/stats',
+    },
   });
 });
 
-// 404 handler for unmatched routes
+// 404 handler
 app.use((req, res, next) => {
   res.status(404).json({
     success: false,
@@ -39,7 +46,7 @@ app.use((req, res, next) => {
 
 // Global error handling middleware
 app.use((err, req, res, next) => {
-  console.error('[Server Error]:', err.stack);
+  console.error('[Server Error]:', err.message);
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Internal Server Error',
