@@ -5,14 +5,16 @@ node_modules/
 
 # Environment variables & secrets (NEVER commit these!)
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!**/.env.example
 
 # Production build outputs
 dist/
 build/
+
+# Test coverage
+coverage/
 
 # Logs
 npm-debug.log*

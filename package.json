@@ -1,0 +1,20 @@
+{
+  "name": "taskflow-mern",
+  "version": "1.0.0",
+  "description": "TaskFlow - Mini Project Management MERN Stack App",
+  "scripts": {
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "test": "npm test --prefix server"
+  },
+  "keywords": [
+    "mern",
+    "react",
+    "express",
+    "mongodb",
+    "nodejs",
+    "taskflow"
+  ],
+  "author": "",
+  "license": "ISC"
+}
