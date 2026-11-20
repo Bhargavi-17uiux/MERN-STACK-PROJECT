@@ -102,7 +102,7 @@ function TaskFlowMain() {
           setProjects(res.data);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     apiClient.getTasks()
       .then((res) => {
@@ -110,7 +110,7 @@ function TaskFlowMain() {
           setTasks(res.data);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Task Actions
@@ -133,7 +133,7 @@ function TaskFlowMain() {
       );
       try {
         await apiClient.updateTask(taskData.id, taskData);
-      } catch {}
+      } catch { }
     } else {
       // Create new task
       const newTask = {
@@ -145,7 +145,7 @@ function TaskFlowMain() {
       setTasks((prev) => [newTask, ...prev]);
       try {
         await apiClient.createTask(taskData);
-      } catch {}
+      } catch { }
     }
     setEditingTask(null);
   };
@@ -155,7 +155,7 @@ function TaskFlowMain() {
     setTasks((prev) => prev.filter((t) => (t.id || t._id) !== taskId));
     try {
       await apiClient.deleteTask(taskId);
-    } catch {}
+    } catch { }
   };
 
   const handleEditTask = (task) => {
@@ -173,7 +173,7 @@ function TaskFlowMain() {
     setSelectedProjectId(newProj.id);
     try {
       await apiClient.createProject(projectData);
-    } catch {}
+    } catch { }
   };
 
   // Filter tasks based on Project, Priority, and Search
